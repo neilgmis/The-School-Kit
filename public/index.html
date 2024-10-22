@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The School Kit</title>
+  <style>
+    /* Basic styles */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f0f0f0;
+    }
+    .container {
+      width: 100%;
+      max-width: 500px;
+      margin: 20px auto;
+      padding: 20px;
+      background-color: #fff;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .title {
+      text-align: center;
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+    }
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 8px;
+      box-sizing: border-box;
+    }
+    .button {
+      width: 100%;
+      padding: 10px;
+      background-color: #1271b6;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+    }
+    .button:hover {
+      background-color: #0a4d82;
+    }
+    .dashboard-section {
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="login-container">
+    <div class="title">Login to The School Kit</div>
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input type="email" id="email" placeholder="Enter your email">
+    </div>
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input type="password" id="password" placeholder="Enter your password">
+    </div>
+    <button class="button" onclick="login()">Login</button>
+  </div>
+
+  <div id="dashboard" class="container" style="display: none;">
+    <div class="title">The School Kit Dashboard</div>
+    <p id="userRole"></p>
+    <div id="attendance-section" class="dashboard-section" style="display: none;">
+      <h3>Record Attendance</h3>
+      <div class="form-group">
+        <label for="studentId">Student ID</label>
+        <input type="text" id="studentId" placeholder="Enter Student ID">
+      </div>
+      <div class="form-group">
+        <label for="attendanceStatus">Attendance Status</label>
+        <select id="attendanceStatus">
+          <option value="Present">Present</option>
+          <option value="Absent">Absent</option>
+          <option value="Late">Late</option>
+          <option value="Excused">Excused</option>
+        </select>
+      </div>
+      <button class="button" onclick="addAttendance()">Submit Attendance</button>
+    </div>
+
+    <div id="behavior-section" class="dashboard-section" style="display: none;">
+      <h3>Log Behaviour Event</h3>
+      <div class="form-group">
+        <label for="behaviourStudentId">Student ID</label>
+        <input type="text" id="behaviourStudentId" placeholder="Enter Student ID">
+      </div>
+      <div class="form-group">
+        <label for="behaviourEvent">Event</label>
+        <input type="text" id="behaviourEvent" placeholder="Describe the event">
+      </div>
+      <div class="form-group">
+        <label for="behaviourCategory">Category</label>
+        <select id="behaviourCategory">
+          <option value="1">Category 1 (Least Severe)</option>
+          <option value="2">Category 2</option>
+          <option value="3">Category 3 (Most Severe)</option>
+        </select>
+      </div>
+      <button class="button" onclick="logBehaviour()">Log Behaviour</button>
+    </div>
+
+    <button class="button" onclick="logout()">Logout</button>
+  </div>
+
+  <script>
+    async function login() {
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await res.json();
+
+      if (data.token) {
+        localStorage.setItem('token', data.token);
+        showDashboard(data.token);
+      } else {
+        alert('Login failed');
+      }
+    }
+
+    function showDashboard(token) {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      document.getElementById('userRole').textContent = `Role: ${payload.user.role}`;
+      document.getElementById('login-container').style.display = 'none';
+      document.getElementById('dashboard').style.display = 'block';
+
+      // Show relevant sections based on user role
+      if (['Leader', 'SchoolAdmin', 'Teacher'].includes(payload.user.role)) {
+        document.getElementById('attendance-section').style.display = 'block';
+        document.getElementById('behavior-section').style.display = 'block';
+      }
+    }
+
+    async function addAttendance() {
+      const studentId = document.getElementById('studentId').value;
+      const status = document.getElementById('attendanceStatus').value;
+
+      const res = await fetch(`/api/attendance/${studentId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-auth-token': localStorage.getItem('token'),
+        },
+        body: JSON.stringify({ status }),
+      });
+
+      const data = await res.json();
+
+      if (data.msg) {
+        alert(data.msg);
+      } else {
+        alert('Attendance recorded');
+      }
+    }
+
+    async function logBehavior() {
+      const studentId = document.getElementById('behaviourStudentId').value;
+      const event = document.getElementById('behaviourEvent').value;
+      const category = document.getElementById('behaviourCategory').value;
+
+      const pointsImpact = category == 1 ? -5 : category == 2 ? -10 : -20;
+
+      const res = await fetch(`/api/behaviour/${studentId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-auth-token': localStorage.getItem('token'),
+        },
+        body: JSON.stringify({ event, category, pointsImpact }),
+      });
+
+      const data = await res.json();
+
+      if (data.msg) {
+        alert(data.msg);
+      } else {
+        alert('Behaviour logged');
+      }
+    }
+
+    function logout() {
+      localStorage.removeItem('token');
+      window.location.reload();
+    }
+
+    // Auto-login if token exists
+    const token = localStorage.getItem('token');
+    if (token) {
+      showDashboard(token);
+    }
+  </script>
+</body>
+</html>
