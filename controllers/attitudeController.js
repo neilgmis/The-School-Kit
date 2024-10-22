@@ -1,52 +1,53 @@
+// controllers/attitudeController.js
 const Attitude = require('../models/attitude');
-const PointsBank = require('../models/pointsBank');  // For adding points to the bank
 
-// Add Attitude to Learning data
-exports.addAttitude = async (req, res) => {
-  const { student, lateness, lessonPerformance } = req.body;
+// Log attitude data
+exports.logAttitude = async (req, res) => {
+  const { studentId, date, points, comments } = req.body;
 
   try {
-    const attitude = new Attitude({
-      student,
-      lateness,
-      lessonPerformance
+    const newAttitude = new Attitude({
+      studentId,
+      date,
+      points,
+      comments
     });
 
-    await attitude.save();
-
-    // Automatically add points to student's points bank
-    const totalPoints = attitude.attendance + attitude.lateness + attitude.lessonPerformance;
-    await PointsBank.findOneAndUpdate(
-      { student },
-      { $inc: { points: totalPoints } }
-    );
-
-    res.status(201).json(attitude);
+    await newAttitude.save();
+    res.json({ msg: 'Attitude data logged successfully', attitude: newAttitude });
   } catch (err) {
     console.error(err.message);
-    res.status(500).send('Server error');
+    res.status(500).send('Server Error');
   }
 };
 
-// View Attitude to Learning trends (filter by student, date)
+// View attitude report for a specific student
 exports.viewAttitude = async (req, res) => {
-  const { student, startDate, endDate } = req.query;
+  const { studentId } = req.params;
+
+  try {
+    const attitudeData = await Attitude.find({ studentId });
+    res.json(attitudeData);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+};
+
+// Get filtered attitude data
+exports.getFilteredAttitude = async (req, res) => {
+  const { yearGroup, formGroup, pointsRange } = req.query;
 
   try {
     const query = {};
+    if (yearGroup) query.yearGroup = yearGroup;
+    if (formGroup) query.formGroup = formGroup;
+    if (pointsRange) query.points = { $gte: pointsRange.min, $lte: pointsRange.max };
 
-    if (student) query.student = student;
-    if (startDate && endDate) {
-      query.date = {
-        $gte: new Date(startDate),
-        $lte: new Date(endDate)
-      };
-    }
-
-    const attitudes = await Attitude.find(query).populate('student');
-    res.json(attitudes);
+    const attitudeData = await Attitude.find(query);
+    res.json(attitudeData);
   } catch (err) {
     console.error(err.message);
-    res.status(500).send('Server error');
+    res.status(500).send('Server Error');
   }
 };

@@ -1,12 +1,16 @@
 const express = require('express');
 const router = express.Router();
-const auth = require('../middleware/auth');
-const checkRole = require('../middleware/checkRole');  // Ensure this line is correct
+const checkRole = require('../middleware/checkRole');
+const { logAssessment, viewAssessment, getFilteredAssessment } = require('../controllers/assessmentController');
+const auth = require('../middleware/auth'); // Import auth middleware
 
-const { addAssessment, viewAssessments } = require('../controllers/assessmentController');
+// Only Teachers can log assessment events
+router.post('/log', auth, checkRole(['Teacher']), logAssessment);
 
-// Routes for assessments
-router.post('/', auth, checkRole(['Teacher', 'SchoolAdmin', 'Leader', 'SuperAdmin']), addAssessment);
-router.get('/', auth, checkRole(['Teacher', 'SchoolAdmin', 'Leader', 'SuperAdmin']), viewAssessments);
+// Teachers and Leaders can view assessment reports
+router.get('/:studentId', auth, checkRole(['Teacher', 'Leader']), viewAssessment);
+
+// Get filtered assessment data (applies to Leaders, Teachers, and SuperAdmins)
+router.get('/', auth, checkRole(['Leader', 'Teacher', 'SuperAdmin']), getFilteredAssessment);
 
 module.exports = router;

@@ -31,3 +31,20 @@ exports.viewBehaviour = async (req, res) => {
     res.status(500).send('Server error');
   }
 };
+// Get filtered behaviour data
+exports.getFilteredBehaviour = async (req, res) => {
+    const { yearGroup, formGroup } = req.query;
+  
+    try {
+      // Build the query based on filters
+      const query = {};
+      if (yearGroup) query.yearGroup = yearGroup;
+      if (formGroup) query.formGroup = formGroup;
+  
+      const behaviourData = await Behaviour.find(query);
+      res.json(behaviourData);
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Server Error');
+    }
+  }

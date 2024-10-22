@@ -1,15 +1,16 @@
-// routes/attendance.js
-
 const express = require('express');
 const router = express.Router();
 const checkRole = require('../middleware/checkRole');
-const auth = require('../middleware/auth');
-const { logAttendance, viewAttendance } = require('../controllers/attendanceController');
+const { logAttendance, viewAttendance, getFilteredAttendance } = require('../controllers/attendanceController');
+const auth = require('../middleware/auth'); // Import auth middleware
 
-// Only SchoolAdmin or Leader (SLT) can log attendance
-router.post('/log', auth, checkRole('SchoolAdmin'), logAttendance);
+// Only Teachers can log attendance events
+router.post('/log', auth, checkRole(['Teacher']), logAttendance);
 
-// Teachers and Leaders can view attendance
-router.get('/:studentId', auth, checkRole('Teacher'), viewAttendance);
+// Teachers and Leaders can view attendance reports
+router.get('/:studentId', auth, checkRole(['Teacher', 'Leader']), viewAttendance);
+
+// Get filtered attendance data (applies to Leaders, Teachers, and SuperAdmins)
+router.get('/', auth, checkRole(['Leader', 'Teacher', 'SuperAdmin']), getFilteredAttendance);
 
 module.exports = router;

@@ -1,33 +1,52 @@
 const Attendance = require('../models/attendance');
 
-// Log attendance
+// Log attendance event
 exports.logAttendance = async (req, res) => {
-  const { student, date, AM, PM, comment } = req.body;
+  const { studentId, date, status, comments } = req.body;
 
   try {
-    const attendance = new Attendance({
-      student,
+    const newAttendance = new Attendance({
+      studentId,
       date,
-      AM,
-      PM,
-      comment
+      status,
+      comments
     });
 
-    await attendance.save();
-    res.status(201).json(attendance);
+    await newAttendance.save();
+    res.json({ msg: 'Attendance logged successfully', attendance: newAttendance });
   } catch (err) {
     console.error(err.message);
-    res.status(500).send('Server error');
+    res.status(500).send('Server Error');
   }
 };
 
-// View attendance for a student
+// View attendance report for a specific student
 exports.viewAttendance = async (req, res) => {
+  const { studentId } = req.params;
+
   try {
-    const attendance = await Attendance.find({ student: req.params.studentId });
-    res.json(attendance);
+    const attendanceData = await Attendance.find({ studentId });
+    res.json(attendanceData);
   } catch (err) {
     console.error(err.message);
-    res.status(500).send('Server error');
+    res.status(500).send('Server Error');
+  }
+};
+
+// Get filtered attendance data
+exports.getFilteredAttendance = async (req, res) => {
+  const { yearGroup, formGroup, status } = req.query;
+
+  try {
+    const query = {};
+    if (yearGroup) query.yearGroup = yearGroup;
+    if (formGroup) query.formGroup = formGroup;
+    if (status) query.status = status;
+
+    const attendanceData = await Attendance.find(query);
+    res.json(attendanceData);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
   }
 };

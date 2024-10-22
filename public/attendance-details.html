@@ -40,6 +40,13 @@
                     <option value="A">A</option>
                     <option value="B">B</option>
                 </select>
+                <label for="status">Attendance Status:</label>
+                <select id="status">
+                    <option value="">All</option>
+                    <option value="Present">Present</option>
+                    <option value="Absent">Absent</option>
+                    <option value="Late">Late</option>
+                </select>
             </div>
 
             <!-- Table for detailed attendance data -->
@@ -48,21 +55,19 @@
                     <tr>
                         <th>Student Name</th>
                         <th>Date</th>
-                        <th>Assessment Event</th>
-                        <th>Category</th>
-                        <th>Points</th>
+                        <th>Status</th>
+                        <th>Comments</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Add attendance data dynamically here -->
+                    <!-- Attendance data will be dynamically inserted here -->
                     <tr>
-                        <td>John Smith</td>
-                        <td>20/10/2024</td>
-                        <td>Disruption</td>
-                        <td>Category 2</td>
-                        <td>-10</td>
+                        <td>Jane Doe</td>
+                        <td>22/10/2024</td>
+                        <td>Present</td>
+                        <td>N/A</td>
                     </tr>
-                    <!-- More rows -->
+                    <!-- More rows will be dynamically inserted -->
                 </tbody>
             </table>
         </main>

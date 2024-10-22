@@ -1,44 +1,53 @@
 const Assessment = require('../models/assessment');
 
-// Add a new assessment
-exports.addAssessment = async (req, res) => {
-  const { student, subject, score } = req.body;
+// Log assessment event
+exports.logAssessment = async (req, res) => {
+  const { studentId, subject, score, date, comments } = req.body;
 
   try {
-    const assessment = new Assessment({
-      student,
+    const newAssessment = new Assessment({
+      studentId,
       subject,
-      score
+      score,
+      date,
+      comments
     });
 
-    await assessment.save();
-    res.status(201).json(assessment);
+    await newAssessment.save();
+    res.json({ msg: 'Assessment logged successfully', assessment: newAssessment });
   } catch (err) {
     console.error(err.message);
-    res.status(500).send('Server error');
+    res.status(500).send('Server Error');
   }
 };
 
-// View assessments (filter by student, subject, date)
-exports.viewAssessments = async (req, res) => {
-  const { student, subject, startDate, endDate } = req.query;
+// View assessment report for a specific student
+exports.viewAssessment = async (req, res) => {
+  const { studentId } = req.params;
+
+  try {
+    const assessmentData = await Assessment.find({ studentId });
+    res.json(assessmentData);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+};
+
+// Get filtered assessment data
+exports.getFilteredAssessment = async (req, res) => {
+  const { yearGroup, subject, scoreRange } = req.query;
 
   try {
     const query = {};
-
-    if (student) query.student = student;
+    if (yearGroup) query.yearGroup = yearGroup;
     if (subject) query.subject = subject;
-    if (startDate && endDate) {
-      query.date = {
-        $gte: new Date(startDate),
-        $lte: new Date(endDate)
-      };
-    }
+    if (scoreRange) query.score = { $gte: scoreRange.min, $lte: scoreRange.max };
 
-    const assessments = await Assessment.find(query).populate('student');
-    res.json(assessments);
+    const assessmentData = await Assessment.find(query);
+    res.json(assessmentData);
   } catch (err) {
     console.error(err.message);
-    res.status(500).send('Server error');
+    res.status(500).send('Server Error');
   }
 };

@@ -62,3 +62,34 @@ const assessmentChart = new Chart(assessmentCtx, {
       maintainAspectRatio: false
   }
 });
+// Example of filtering logic for behaviour data
+function filterBehaviourData() {
+  const yearGroupFilter = document.getElementById('yearGroup').value;
+  const formGroupFilter = document.getElementById('formGroup').value;
+
+  // Make an API call to fetch filtered behaviour data from the server
+  fetch(`/api/behaviour?yearGroup=${yearGroupFilter}&formGroup=${formGroupFilter}`)
+    .then(response => response.json())
+    .then(data => {
+      // Clear the existing table data
+      const tableBody = document.querySelector('.data-table tbody');
+      tableBody.innerHTML = '';
+
+      // Populate the table with the filtered data
+      data.forEach(behaviour => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${behaviour.studentName}</td>
+          <td>${behaviour.date}</td>
+          <td>${behaviour.event}</td>
+          <td>${behaviour.category}</td>
+          <td>${behaviour.points}</td>
+        `;
+        tableBody.appendChild(row);
+      });
+    });
+}
+
+// Attach event listeners to the filter dropdowns
+document.getElementById('yearGroup').addEventListener('change', filterBehaviourData);
+document.getElementById('formGroup').addEventListener('change', filterBehaviourData);

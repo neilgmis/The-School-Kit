@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detailed Assessment Data</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="dashboard-container">
+        <nav class="sidebar">
+            <ul>
+                <li><a href="leader-dashboard.html">Dashboard</a></li>
+                <li><a href="#">Student Data</a></li>
+                <li><a href="#">Behaviour Logs</a></li>
+                <li><a href="#">Attendance Tracking</a></li>
+                <li><a href="#">Assessments</a></li>
+                <li><a href="#">Reports</a></li>
+            </ul>
+        </nav>
+
+        <!-- Main content -->
+        <main class="dashboard-content">
+            <h1>Assessment Data Overview</h1>
+            
+            <!-- Filters -->
+            <div class="filters">
+                <label for="yearGroup">Year Group:</label>
+                <select id="yearGroup">
+                    <option value="">All</option>
+                    <option value="Year 7">Year 7</option>
+                    <option value="Year 8">Year 8</option>
+                    <option value="Year 9">Year 9</option>
+                    <!-- Add more as needed -->
+                </select>
+                <label for="subject">Subject:</label>
+                <select id="subject">
+                    <option value="">All</option>
+                    <option value="Maths">Maths</option>
+                    <option value="English">English</option>
+                    <option value="Science">Science</option>
+                </select>
+                <label for="scoreRange">Score Range:</label>
+                <input type="number" id="scoreRangeMin" placeholder="Min score">
+                <input type="number" id="scoreRangeMax" placeholder="Max score">
+            </div>
+
+            <!-- Table for detailed assessment data -->
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Student Name</th>
+                        <th>Subject</th>
+                        <th>Date</th>
+                        <th>Score</th>
+                        <th>Comments</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Assessment data will be dynamically inserted here -->
+                    <tr>
+                        <td>John Doe</td>
+                        <td>Maths</td>
+                        <td>22/10/2024</td>
+                        <td>85%</td>
+                        <td>Well done!</td>
+                    </tr>
+                    <!-- More rows will be dynamically inserted -->
+                </tbody>
+            </table>
+        </main>
+    </div>
+
+    <!-- Add script to handle filters and data -->
+    <script src="dashboard.js"></script>
+</body>
+</html>
