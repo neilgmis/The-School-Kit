@@ -132,6 +132,31 @@ canvas {
   margin-right: 10px;
   cursor: pointer;
 }
+/* Styling for detail view buttons */
+.detail-view-btn {
+  display: block;
+  margin: 10px auto;
+  padding: 10px 15px;
+  background-color: #1271b6;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.detail-view-btn:hover {
+  background-color: #0d5a94;
+}
+
+/* Styling for search box */
+.search-box {
+  display: block;
+  width: 80%;
+  padding: 10px;
+  margin: 10px auto;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
 
 .action-buttons button:hover {
   background-color: #0d5a94;
