@@ -1,0 +1,138 @@
+/* General styles */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  height: 100vh;
+  flex-direction: column;  /* Stack content vertically */
+  overflow: hidden;  /* Prevent the sidebar from scrolling with the content */
+}
+
+/* Dashboard title */
+h1 {
+  text-align: center;
+  color: #1271b6;
+  margin: 20px 0;
+}
+
+/* Dashboard container */
+.dashboard-container {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 200px;
+  background-color: #1271b6;
+  color: white;
+  padding: 20px;
+  height: 100vh;  /* Full viewport height */
+  position: sticky;  /* Make the sidebar sticky */
+  top: 0;  /* Stick to the top */
+  left: 0;  /* Align to the left of the screen */
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar ul li {
+  margin: 20px 0;
+}
+
+.sidebar ul li a {
+  color: white;
+  text-decoration: none;
+  font-size: 18px;
+}
+
+/* Main dashboard content */
+.dashboard-content {
+  flex-grow: 1;
+  padding: 20px;
+  background-color: #f4f4f4;
+  overflow-y: auto;  /* Allow vertical scrolling within the main content */
+  height: calc(100vh - 40px);  /* Full height minus the padding/margin */
+}
+
+/* Title styling */
+h2 {
+  color: #1271b6;
+  text-align: center;
+}
+
+/* Grid layout for visualizations in 3 columns */
+.grid-layout {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);  /* Create 3 equal columns */
+  grid-gap: 50px 30px; /* Increase vertical gap (row gap) between sections */
+  align-items: start;  /* Make sure items align to the top */
+  border-spacing: 2px;
+}
+
+/* Add grey lines between sections */
+.grid-layout > section {
+  border-bottom: 2px solid #ccc;
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+}
+
+/* Summary cards spanning full width */
+.summary-cards {
+  grid-column: span 3; /* Span all 3 columns for the summary section */
+  display: flex;
+  justify-content: space-between;
+}
+
+.card {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  flex: 1;
+  margin: 0 10px;
+}
+
+/* Visualizations */
+canvas {
+  width: 100%;  /* Allow the width to auto-adjust */
+  height: 300px;  /* Set a height of 300px */
+  max-height: 350px;  /* Set a max height of 350px */
+  margin: 20px 0;
+}
+
+
+/* Flexbox layout for charts */
+.behaviour-summary, .attendance-overview, .assessment-performance {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column; /* Stack chart title and canvas vertically */
+  min-height: 300px;  /* Minimum height to avoid shrinking */
+  position: relative;
+}
+
+/* Action buttons */
+.action-buttons {
+  margin-top: 30px;
+  grid-column: span 3; /* Make buttons span all 3 columns */
+}
+
+.action-buttons button {
+  padding: 10px 20px;
+  background-color: #1271b6;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.action-buttons button:hover {
+  background-color: #0d5a94;
+}

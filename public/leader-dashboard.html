@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leader Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="dashboard-container">
+        <nav class="sidebar">
+            <ul>
+                <li><a href="#">Dashboard</a></li>
+                <li><a href="#">Student Data</a></li>
+                <li><a href="#">Behaviour Logs</a></li>
+                <li><a href="#">Attendance Tracking</a></li>
+                <li><a href="#">Assessments</a></li>
+                <li><a href="#">Reports</a></li>
+            </ul>
+        </nav>
+
+        <!-- Main content -->
+        <main class="dashboard-content">
+            <h1>Leader Dashboard</h1> <!-- Title -->
+
+            <!-- Grid container for visualizations -->
+            <div class="grid-layout">
+                <!-- Student Summary (spanning all columns) -->
+                <section class="student-summary">
+                    <h2>Student Summary</h2>
+                    <div class="summary-cards">
+                        <div class="card">Total Students: 120</div>
+                        <div class="card">Students of Concern: 10</div>
+                        <div class="card">Top Performers: 15</div>
+                    </div>
+                </section>
+
+                <!-- Behaviour Summary -->
+                <section class="behaviour-summary">
+                    <h2>Behaviour Summary</h2> <!-- Centralized title -->
+                    <canvas id="behaviourChart"></canvas>
+                </section>
+
+                <!-- Attendance Overview -->
+                <section class="attendance-overview">
+                    <h2>Attendance Overview</h2> <!-- Centralized title -->
+                    <canvas id="attendanceChart"></canvas>
+                </section>
+
+                <!-- Assessment Performance -->
+                <section class="assessment-performance">
+                    <h2>Assessment Performance</h2> <!-- Centralized title -->
+                    <canvas id="assessmentChart"></canvas>
+                </section>
+            </div>
+
+            <!-- Action Buttons (spanning all columns) -->
+            <section class="action-buttons">
+                <button>Add New Behaviour Log</button>
+                <button>Generate Report</button>
+                <button>View Attendance Trends</button>
+            </section>
+        </main>
+    </div>
+
+    <!-- Include Chart.js first, then custom JS -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="dashboard.js"></script>
+</body>
+</html>
