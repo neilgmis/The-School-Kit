@@ -35,18 +35,24 @@ exports.viewAttendance = async (req, res) => {
 
 // Get filtered attendance data
 exports.getFilteredAttendance = async (req, res) => {
-  const { yearGroup, formGroup, status } = req.query;
-
-  try {
-    const query = {};
-    if (yearGroup) query.yearGroup = yearGroup;
-    if (formGroup) query.formGroup = formGroup;
-    if (status) query.status = status;
-
-    const attendanceData = await Attendance.find(query);
-    res.json(attendanceData);
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Server Error');
-  }
-};
+    const { yearGroup, formGroup, status, startDate, endDate } = req.query;
+  
+    try {
+      const query = {};
+      if (yearGroup) query.yearGroup = yearGroup;
+      if (formGroup) query.formGroup = formGroup;
+      if (status) query.status = status;
+  
+      // Filter by date range if provided
+      if (startDate && endDate) {
+        query.date = { $gte: new Date(startDate), $lte: new Date(endDate) };
+      }
+  
+      const attendanceData = await Attendance.find(query);
+      res.json(attendanceData);
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Server Error');
+    }
+  };
+  

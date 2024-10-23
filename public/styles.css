@@ -4,51 +4,54 @@ body {
   margin: 0;
   padding: 0;
   display: flex;
-  height: 100vh;
-  flex-direction: column;  /* Stack content vertically */
-  overflow: hidden;  /* Prevent the sidebar from scrolling with the content */
+  flex-direction: column;
+  min-height: 100vh;
 }
 
-/* Dashboard title */
-h1 {
-  text-align: center;
-  color: #1271b6;
-  margin: 20px 0;
-}
-
-/* Dashboard container */
 .dashboard-container {
   display: flex;
   width: 100%;
   height: 100%;
-  position: relative;
 }
 
-/* Sidebar */
-.sidebar {
-  width: 200px;
+/* Header Menu */
+.sticky-header {
+  position: sticky;
+  top: 0;
   background-color: #1271b6;
   color: white;
-  padding: 20px;
-  height: 100vh;  /* Full viewport height */
-  position: sticky;  /* Make the sidebar sticky */
-  top: 0;  /* Stick to the top */
-  left: 0;  /* Align to the left of the screen */
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 1000;
 }
 
-.sidebar ul {
+.sticky-header h1 {
+  margin: 0;
+  font-size: 24px;
+}
+
+.sticky-header nav ul {
   list-style: none;
+  display: flex;
+  gap: 15px;
+  margin: 0;
   padding: 0;
 }
 
-.sidebar ul li {
-  margin: 20px 0;
+.sticky-header nav ul li {
+  display: inline;
 }
 
-.sidebar ul li a {
+.sticky-header nav ul li a {
   color: white;
   text-decoration: none;
   font-size: 18px;
+}
+
+.sticky-header nav ul li a:hover {
+  text-decoration: underline;
 }
 
 /* Main dashboard content */
@@ -56,35 +59,27 @@ h1 {
   flex-grow: 1;
   padding: 20px;
   background-color: #f4f4f4;
-  overflow-y: auto;  /* Allow vertical scrolling within the main content */
-  height: calc(100vh - 40px);  /* Full height minus the padding/margin */
-}
-
-/* Title styling */
-h2 {
-  color: #1271b6;
-  text-align: center;
 }
 
 /* Grid layout for visualizations in 3 columns */
 .grid-layout {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);  /* Create 3 equal columns */
-  grid-gap: 50px 30px; /* Increase vertical gap (row gap) between sections */
-  align-items: start;  /* Make sure items align to the top */
-  border-spacing: 2px;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 20px;
+  align-items: start;
 }
 
-/* Add grey lines between sections */
-.grid-layout > section {
-  border-bottom: 2px solid #ccc;
-  padding-bottom: 20px;
-  margin-bottom: 20px;
+/* Student Summary section spanning full width */
+.student-summary-full {
+  grid-column: span 3;
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  margin-top: 30px;
 }
 
-/* Summary cards spanning full width */
 .summary-cards {
-  grid-column: span 3; /* Span all 3 columns for the summary section */
   display: flex;
   justify-content: space-between;
 }
@@ -98,29 +93,50 @@ h2 {
   margin: 0 10px;
 }
 
-/* Visualizations */
+/* Canvas (Charts) */
 canvas {
-  width: 100%;  /* Allow the width to auto-adjust */
-  height: 300px;  /* Set a height of 300px */
-  max-height: 350px;  /* Set a max height of 350px */
+  width: 100%;
+  height: 300px;
+  max-height: 300px;
   margin: 20px 0;
 }
 
-
-/* Flexbox layout for charts */
-.behaviour-summary, .attendance-overview, .assessment-performance {
+.filter-options {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  flex-direction: column; /* Stack chart title and canvas vertically */
-  min-height: 300px;  /* Minimum height to avoid shrinking */
-  position: relative;
+  margin-top: 10px;
+}
+
+.filter-options label {
+  font-weight: bold;
+}
+
+.filter-options input {
+  padding: 5px;
+  margin-left: 10px;
+}
+
+.filter-options button {
+  padding: 5px 15px;
+  background-color: #1271b6;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.filter-options button:hover {
+  background-color: #0a5087;
 }
 
 /* Action buttons */
 .action-buttons {
-  margin-top: 30px;
-  grid-column: span 3; /* Make buttons span all 3 columns */
+  margin-bottom: 20px; /* Add space between header and buttons */
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
 }
 
 .action-buttons button {
@@ -129,35 +145,55 @@ canvas {
   color: white;
   border: none;
   border-radius: 5px;
-  margin-right: 10px;
   cursor: pointer;
-}
-/* Styling for detail view buttons */
-.detail-view-btn {
-  display: block;
-  margin: 10px auto;
-  padding: 10px 15px;
-  background-color: #1271b6;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.detail-view-btn:hover {
-  background-color: #0d5a94;
-}
-
-/* Styling for search box */
-.search-box {
-  display: block;
-  width: 80%;
-  padding: 10px;
-  margin: 10px auto;
-  border: 1px solid #ccc;
-  border-radius: 5px;
 }
 
 .action-buttons button:hover {
   background-color: #0d5a94;
+}
+
+/* Safeguarding Summary */
+.safeguarding-summary {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.safeguarding-container {
+  position: relative;
+}
+
+.safeguarding-list {
+  max-height: 200px;
+  overflow-y: auto;
+  margin-top: 10px;
+  padding: 0;
+  list-style: none;
+}
+
+.safeguarding-list li {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.red-flag {
+  color: red;
+  font-weight: bold;
+  margin-left: 10px;
+}
+
+.hidden {
+  display: none;
+}
+
+.toggle-button {
+  padding: 5px 15px;
+  background-color: #1271b6;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  margin-bottom: 10px;
 }

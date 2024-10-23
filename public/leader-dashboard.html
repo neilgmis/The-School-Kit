@@ -4,12 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Leader Dashboard</title>
+    <!-- Link to your CSS file -->
     <link rel="stylesheet" href="styles.css">
+    <!-- Link to Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <!-- Sidebar -->
-    <div class="dashboard-container">
-        <nav class="sidebar">
+    <!-- Header with Menu Options -->
+    <header class="sticky-header">
+        <h1>Leader Dashboard</h1>
+        <nav>
             <ul>
                 <li><a href="#">Dashboard</a></li>
                 <li><a href="#">Student Data</a></li>
@@ -19,59 +23,117 @@
                 <li><a href="#">Reports</a></li>
             </ul>
         </nav>
+    </header>
 
-        <!-- Main content -->
-        <main class="dashboard-content">
-            <h1>Leader Dashboard</h1> <!-- Title -->
+    <!-- Action Buttons at the top of the page -->
+    <section class="action-buttons">
+        <button>Add New Behaviour Log</button>
+        <button>Generate Report</button>
+        <button>View Attendance Trends</button>
+    </section>
 
-            <!-- Grid container for visualizations -->
-            <div class="grid-layout">
-                <!-- Student Summary (spanning all columns) -->
-                <section class="student-summary">
-                    <h2>Student Summary</h2>
-                    <div class="summary-cards">
-                        <div class="card">Total Students: 120</div>
-                        <div class="card">Students of Concern: 10</div>
-                        <div class="card">Top Performers: 15</div>
-                    </div>
-                </section>
-
-                <!-- Behaviour Summary -->
-                <section class="behaviour-summary">
-                    <h2>Behaviour Summary</h2>
-                    <canvas id="behaviourChart"></canvas>
-                    <a href="behaviour-details.html"><button class="detail-view-btn">View All Behaviour Data</button></a>
-                    <input type="text" placeholder="Search for student's behaviour" class="search-box">
-                </section>
-
-                <!-- Attendance Overview -->
-                <section class="attendance-overview">
-                    <h2>Attendance Overview</h2>
-                    <canvas id="attendanceChart"></canvas>
-                    <a href="attendance-details.html"><button class="detail-view-btn">View All Attendance Data</button></a>
-                    <input type="text" placeholder="Search for student's attendance" class="search-box">
-                </section>
-
-                <!-- Assessment Performance -->
-                <section class="assessment-performance">
-                    <h2>Assessment Performance</h2>
-                    <canvas id="assessmentChart"></canvas>
-                    <a href="assessment-details.html"><button class="detail-view-btn">View All Assessment Data</button></a>
-                    <input type="text" placeholder="Search for student's assessments" class="search-box">
-                </section>
-            </div>
-
-            <!-- Action Buttons (spanning all columns) -->
-            <section class="action-buttons">
-                <button>Add New Behaviour Log</button>
-                <button>Generate Report</button>
-                <button>View Attendance Trends</button>
+    <main class="dashboard-content">
+        <!-- Grid container for visualizations -->
+        <div class="grid-layout">
+            <!-- Safeguarding Logs -->
+            <section class="safeguarding-summary">
+                <h2>Safeguarding Logs</h2>
+                <div class="safeguarding-container">
+                    <button class="toggle-button" onclick="toggleSafeguardingLogs()">Toggle Logs</button>
+                    <ul id="safeguardingLogs" class="safeguarding-list hidden">
+                        <!-- Placeholder for logs (this will be populated dynamically) -->
+                    </ul>
+                </div>
             </section>
-        </main>
-    </div>
 
-    <!-- Include Chart.js first, then custom JS -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+            <!-- Behaviour Summary -->
+            <section class="behaviour-summary">
+                <h2>Behaviour Summary</h2>
+                <canvas id="behaviourChart"></canvas>
+                <div class="filter-options">
+                    <label for="from-date">From:</label>
+                    <input type="date" id="from-date">
+                    <label for="to-date">To:</label>
+                    <input type="date" id="to-date">
+                    <button id="filterBehaviourBtn">Filter</button>
+                </div>
+                <button>View All Behaviour Data</button>
+                <input type="text" placeholder="Search for student's behaviour">
+            </section>
+
+            <!-- Attendance Overview -->
+            <section class="attendance-overview">
+                <h2>Attendance Overview</h2>
+                <canvas id="attendanceChart"></canvas>
+                <div class="filter-options">
+                    <label for="from-date-attendance">From:</label>
+                    <input type="date" id="from-date-attendance">
+                    <label for="to-date-attendance">To:</label>
+                    <input type="date" id="to-date-attendance">
+                    <button id="filterAttendanceBtn">Filter</button>
+                </div>
+                <button>View All Attendance Data</button>
+                <input type="text" placeholder="Search for student's attendance">
+            </section>
+
+            <!-- Assessment Performance -->
+            <section class="assessment-performance">
+                <h2>Assessment Performance</h2>
+                <canvas id="assessmentChart"></canvas>
+                <div class="filter-options">
+                    <label for="from-date-assessment">From:</label>
+                    <input type="date" id="from-date-assessment">
+                    <label for="to-date-assessment">To:</label>
+                    <input type="date" id="to-date-assessment">
+                    <button id="filterAssessmentBtn">Filter</button>
+                </div>
+                <button>View All Assessment Data</button>
+                <input type="text" placeholder="Search for student's assessment">
+            </section>
+
+            <!-- Attitude to Learning -->
+            <section class="attitude-summary">
+                <h2>Attitude to Learning</h2>
+                <canvas id="attitudeChart"></canvas>
+                <div class="filter-options">
+                    <label for="from-date-attitude">From:</label>
+                    <input type="date" id="from-date-attitude">
+                    <label for="to-date-attitude">To:</label>
+                    <input type="date" id="to-date-attitude">
+                    <button id="filterAttitudeBtn">Filter</button>
+                </div>
+                <button>View All Attitude Data</button>
+                <input type="text" placeholder="Search for student's attitude data">
+            </section>
+
+            <!-- Points Bank -->
+            <section class="points-summary">
+                <h2>Points Bank</h2>
+                <canvas id="pointsChart"></canvas>
+                <div class="filter-options">
+                    <label for="from-date-points">From:</label>
+                    <input type="date" id="from-date-points">
+                    <label for="to-date-points">To:</label>
+                    <input type="date" id="to-date-points">
+                    <button id="filterPointsBtn">Filter</button>
+                </div>
+                <button>View All Points Data</button>
+                <input type="text" placeholder="Search for student's points data">
+            </section>
+        </div>
+
+        <!-- Student Summary section at the bottom spanning the full width -->
+        <section class="student-summary-full">
+            <h2>Student Summary</h2>
+            <div class="summary-cards">
+                <div class="card">Total Students: 120</div>
+                <div class="card">Students of Concern: 10</div>
+                <div class="card">Top Performers: 15</div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Link to your JS file -->
     <script src="dashboard.js"></script>
 </body>
 </html>
